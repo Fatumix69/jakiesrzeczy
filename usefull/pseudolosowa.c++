@@ -7,8 +7,8 @@ using namespace std;
 
 int liczba, strzal, ile_prob = 0;
 
-int main(){
-
+int main()
+{
     cout << "Witaj! Pomyslalem sobie liczbe od 1 do 100" << endl;
     srand(time(NULL));
     liczba = rand() % 100 + 1;
