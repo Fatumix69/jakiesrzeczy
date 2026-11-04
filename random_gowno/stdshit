@@ -1,0 +1,13 @@
+#include <iostream>
+
+// Twój własny algorytm
+int count = 10; 
+
+using namespace std; // Niebezpieczeństwo! w std istnieje już np. std::count
+
+int main() {
+    // Kompilator zgłosi błąd, bo nie wie czy chodzi o Twoją zmienną count,
+    // czy o szablon funkcji std::count
+    cout << count; 
+    return 0;
+}
