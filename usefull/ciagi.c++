@@ -18,7 +18,8 @@ int main()
         //wynik = 1 / (sqrt(n + 1) - sqrt(n - 1));
         //wynik = (sqrt(pow(n, 2) + 1) + sqrt(n)) / (n - pow((pow(n, 2) + 8), (1.0 / 3.0)));
         //wynik = (sqrt(pow(n, 2) + 1) + sqrt(n)) * (pow(n, 2) + (n * pow((pow(n, 2) + 8), (1.0 / 3.0))) + (pow((pow(n, 2) + 8), (1.0 / 3.0))));
-        wynik = pow(n, 3) - (pow(n, 2) + 8);
+        //wynik = pow(n, 3) - (pow(n, 2) + 8);
+        wynik;
 
         cout << wynik << endl;
     }

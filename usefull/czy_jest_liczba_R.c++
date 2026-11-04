@@ -8,7 +8,8 @@ int main()
     string userInput;
     double a;
 
-    while (true) {
+    while (true) 
+    {
         cout << "Podaj liczbe 'a': " << endl;
         cin >> userInput; 
 
@@ -21,12 +22,14 @@ int main()
             
             // Sprawdza czy liczba wszystkich wpisanych znakow jest rowna liczbie cyfr
             // Np. jesli wpisane zostalo "12$"", liczba znakow wynosi 3 ale liczba cyfr 
-            if (charactersProcessed == userInput.length()){
+            if (charactersProcessed == userInput.length())
+            {
                 
                 // Liczba wszystkich znakow zgadza sie z liczba cyfr, zakancza petle
                 break;
             } 
-            else{
+            else
+            {
 
                 // Liczba wszystkich znakow nie zgadza sie z liczba cyfr
                 cout << "BLAD! Uzyles znakow lub liter! Musisz podac liczbe rzeczywista. Sproboj ponownie." << endl;
