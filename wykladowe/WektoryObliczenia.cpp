@@ -53,7 +53,7 @@ struct Wektor3D
     }
 
     // funkcja zamieniajaca -0.0 na 0.0
-    double bezMinusZera(double liczba) const
+    double bez_minus_zera(double liczba) const
     {
         if (liczba == 0.0)
         {
@@ -65,7 +65,7 @@ struct Wektor3D
     // funkcja do wypisania wektora
     void wypisz(const std::string& nazwa) const 
     {
-        std::cout << nazwa << " = [" << bezMinusZera(x) << ", " << bezMinusZera(y) << ", " << bezMinusZera(z) << "]\n";
+        std::cout << nazwa << " = [" << bez_minus_zera(x) << ", " << bez_minus_zera(y) << ", " << bez_minus_zera(z) << "]\n";
     }
 };
 
@@ -145,7 +145,7 @@ void obliczenia(const Wektor3D& VA, const Wektor3D& VB, const Wektor3D& VC)
 }
 
 // funkcja pomocnicza do podawania wspolrzednych wektorow
-Wektor3D wczytajWektor(const std::string& ktorego)
+Wektor3D podaj_wspolrzedne(const std::string& ktorego)
 {
     double x, y, z;
     std::cout << "\nPodaj wspolrzedne " << ktorego << ":\n";
@@ -166,9 +166,9 @@ int main()
 
     std::cout << "\nWitaj w kalkulatorze wektorow 3D!\n";
 
-    Wektor3D VA = wczytajWektor("pierwszego wektora VA");
-    Wektor3D VB = wczytajWektor("drugiego wektora VB");
-    Wektor3D VC = wczytajWektor("trzeciego wektora VC");
+    Wektor3D VA = podaj_wspolrzedne("pierwszego wektora VA");
+    Wektor3D VB = podaj_wspolrzedne("drugiego wektora VB");
+    Wektor3D VC = podaj_wspolrzedne("trzeciego wektora VC");
     obliczenia(VA, VB, VC);
 
     // funkcja zeby nie znikal terminal po wykonaniu obliczen na windowsie
