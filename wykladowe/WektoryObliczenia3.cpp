@@ -170,12 +170,12 @@ void wypisz_L_wektora_jednowego(const std::string& nazwa, const Wektor3D& wektor
     }
 }
 
-void wyznacz_dlugosci_wektorow_jednostkowych(const Dane_wektory_jednostkowe& wektor1, const Dane_L_wektorow& dlugosc)
+void wyznacz_dlugosci_wektorow_jednostkowych(const Dane_wektory_jednostkowe& wektor1, const Dane_L_wektorow& policzona_dlugosc)
 {
     std::cout << "\nDlugosci wektorow jednostkowych:\n";
-    wypisz_L_wektora_jednowego("LA1", wektor1.VA1, dlugosc.LA);
-    wypisz_L_wektora_jednowego("LB1", wektor1.VB1, dlugosc.LB);
-    wypisz_L_wektora_jednowego("LC1", wektor1.VC1, dlugosc.LC);
+    wypisz_L_wektora_jednowego("LA1", wektor1.VA1, policzona_dlugosc.LA);
+    wypisz_L_wektora_jednowego("LB1", wektor1.VB1, policzona_dlugosc.LB);
+    wypisz_L_wektora_jednowego("LC1", wektor1.VC1, policzona_dlugosc.LC);
 }
 
 Dane_il_wektorowe wyznacz_iloczyny_wektorowe(const Wektor3D& VA, const Wektor3D& VB, const Wektor3D& VC)
