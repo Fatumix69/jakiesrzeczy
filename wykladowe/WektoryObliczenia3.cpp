@@ -8,14 +8,16 @@
 #include <cmath>
 #include <iomanip>
 #include <string>
+#include <cstddef>
 #include <stdexcept>
+#include <limits>
 
 // funkcja zerujaca male wartosci ktore przy 4 miejscach po przecinku wyswietlalyby 0.0000 albo -0.0000
 double bez_minus_zera(double liczba)
 {
     const double prog_wyswietlania = 0.00005;
 
-    if (std::abs(liczba) < prog_wyswietlania)
+    if(std::abs(liczba) < prog_wyswietlania)
     {
         return 0.0;
     }
@@ -23,27 +25,27 @@ double bez_minus_zera(double liczba)
 }
 
 // struktura wektora 3D i dzialania na nim
-struct Wektor3D
+struct Wektor_3D
 {
     double x, y, z;
 
     // dlugosc wektora
-    double dlugosc() const
+    double policz_dlugosc() const
     {
         return std::sqrt(x * x + y * y + z * z);
     }
 
     // iloczyn skalarny
-    double il_skalar(const Wektor3D& drugi) const
+    double policz_il_skalar(const Wektor_3D& drugi) const
     {
         return x * drugi.x + y * drugi.y + z * drugi.z;
     }
 
     // wektor jednostkowy
-    Wektor3D jednostkowy() const
+    Wektor_3D policz_jednostkowy() const
     {
-        double L = dlugosc();
-        if (L == 0.0)
+        double L = policz_dlugosc();
+        if(L == 0.0)
         {
             // dla wektora zerowego zwracamy 0 (placeholder), zeby nie bylo dzielenia przez 0
             return {0.0, 0.0, 0.0}; 
@@ -52,7 +54,7 @@ struct Wektor3D
     }
 
     // iloczyn wektorowy liczony za pomoca macierzy z wykorzystaniem rozwiniecia laplace'a
-    Wektor3D il_wektor(const Wektor3D& drugi) const
+    Wektor_3D policz_il_wektor(const Wektor_3D& drugi) const
     {
         return 
         {
@@ -63,13 +65,13 @@ struct Wektor3D
     }
 
     // funkcja do wypisania wektora
-    void wypisz(const std::string& nazwa) const 
+    void wypisz_wektor(const std::string& nazwa) const 
     {
         std::cout << nazwa << " = [" << bez_minus_zera(x) << ", " << bez_minus_zera(y) << ", " << bez_minus_zera(z) << "]\n";
     }
 };
 
-struct Dane_il_skalarne
+struct Dane_il_skalarnych
 {
     double AoB, BoC, CoA;
 };
@@ -79,30 +81,30 @@ struct Dane_L_wektorow
     double LA, LB, LC;
 };
 
-struct Dane_wektory_jednostkowe
+struct Dane_wektorow_jednostkowych
 {
-    Wektor3D VA1, VB1, VC1;
+    Wektor_3D VA1, VB1, VC1;
 };
 
-struct Dane_il_wektorowe
+struct Dane_il_wektorowych
 {
-    Wektor3D VAB, VBC, VCA;
+    Wektor_3D VAB, VBC, VCA;
 };
 
-void wypisz_dane(const Wektor3D& VA, const Wektor3D& VB, const Wektor3D& VC)
+void wypisz_dane(const Wektor_3D& VA, const Wektor_3D& VB, const Wektor_3D& VC)
 {
     std::cout << "\nDane:\n";
 
-    VA.wypisz("VA");
-    VB.wypisz("VB");
-    VC.wypisz("VC");
+    VA.wypisz_wektor("VA");
+    VB.wypisz_wektor("VB");
+    VC.wypisz_wektor("VC");
 }
 
-Dane_L_wektorow wyznacz_L_wektorow(const Wektor3D& VA, const Wektor3D& VB, const Wektor3D& VC)
+Dane_L_wektorow wyznacz_L_wektorow(const Wektor_3D& VA, const Wektor_3D& VB, const Wektor_3D& VC)
 {
-    double LA = VA.dlugosc();
-    double LB = VB.dlugosc();
-    double LC = VC.dlugosc();
+    double LA = VA.policz_dlugosc();
+    double LB = VB.policz_dlugosc();
+    double LC = VC.policz_dlugosc();
 
     std::cout << "\nDlugosci wektorow:\n";
     std::cout << "LA = " << LA << "\nLB = " << LB << "\nLC = " << LC << "\n";
@@ -110,11 +112,11 @@ Dane_L_wektorow wyznacz_L_wektorow(const Wektor3D& VA, const Wektor3D& VB, const
     return {LA, LB, LC};
 }
 
-Dane_il_skalarne wyznacz_il_skalarne(const Wektor3D& VA, const Wektor3D& VB, const Wektor3D& VC)
+Dane_il_skalarnych wyznacz_il_skalarne(const Wektor_3D& VA, const Wektor_3D& VB, const Wektor_3D& VC)
 {
-    double AoB = VA.il_skalar(VB);
-    double BoC = VB.il_skalar(VC);
-    double CoA = VC.il_skalar(VA);
+    double AoB = VA.policz_il_skalar(VB);
+    double BoC = VB.policz_il_skalar(VC);
+    double CoA = VC.policz_il_skalar(VA);
 
     std::cout << "\nIloczyny skalarne:\n";
     std::cout << "VA o VB = " << bez_minus_zera(AoB) << "\nVB o VC = " << bez_minus_zera(BoC) << "\nVC o VA = " << bez_minus_zera(CoA) << "\n";
@@ -122,16 +124,16 @@ Dane_il_skalarne wyznacz_il_skalarne(const Wektor3D& VA, const Wektor3D& VB, con
     return {AoB, BoC, CoA};
 }
 
-void wyznacz_nierownosc_CSB(const Dane_il_skalarne& skalar, const Dane_L_wektorow& policzona_dlugosc)
+void wyznacz_nierownosc_CSB(const Dane_il_skalarnych& skalar, const Dane_L_wektorow& dlugosci)
 {
     std::cout << "\nNierownosc Cauchy-Schwarz-Buniakowski:\n";
-    std::cout << "|VA o VB| <= LA * LB;     " << std::abs(skalar.AoB) << " <= " << policzona_dlugosc.LA * policzona_dlugosc.LB << "\n";
-    std::cout << "|VB o VC| <= LB * LC;     " << std::abs(skalar.BoC) << " <= " << policzona_dlugosc.LB * policzona_dlugosc.LC << "\n";
-    std::cout << "|VC o VA| <= LC * LA;     " << std::abs(skalar.CoA) << " <= " << policzona_dlugosc.LC * policzona_dlugosc.LA << "\n";
+    std::cout << "|VA o VB| <= LA * LB;     " << std::abs(skalar.AoB) << " <= " << dlugosci.LA * dlugosci.LB << "\n";
+    std::cout << "|VB o VC| <= LB * LC;     " << std::abs(skalar.BoC) << " <= " << dlugosci.LB * dlugosci.LC << "\n";
+    std::cout << "|VC o VA| <= LC * LA;     " << std::abs(skalar.CoA) << " <= " << dlugosci.LC * dlugosci.LA << "\n";
 }
 
 // funkcja pomocnicza do wypisania wektora jednostkowego oraz sprawdzenia czy istnieje (czy nie jest zerowy)
-void wypisz_wektor_jednostkowy(const std::string& nazwa, const Wektor3D& wektor, double dlugosc_oryginalu)
+void wypisz_wektor_jednostkowy(const std::string& nazwa, const Wektor_3D& wektor, double dlugosc_oryginalu)
 {
     if(dlugosc_oryginalu == 0.0)
     {
@@ -139,26 +141,26 @@ void wypisz_wektor_jednostkowy(const std::string& nazwa, const Wektor3D& wektor,
     }
     else
     {
-        wektor.wypisz(nazwa);
+        wektor.wypisz_wektor(nazwa);
     }
 }
 
-Dane_wektory_jednostkowe wyznacz_wektory_jednostkowe(const Wektor3D& VA, const Wektor3D& VB, const Wektor3D& VC, const Dane_L_wektorow& policzona_dlugosc)
+Dane_wektorow_jednostkowych wyznacz_wektory_jednostkowe(const Wektor_3D& VA, const Wektor_3D& VB, const Wektor_3D& VC, const Dane_L_wektorow& dlugosci)
 {
-    Wektor3D VA1 = VA.jednostkowy();
-    Wektor3D VB1 = VB.jednostkowy();
-    Wektor3D VC1 = VC.jednostkowy();
+    Wektor_3D VA1 = VA.policz_jednostkowy();
+    Wektor_3D VB1 = VB.policz_jednostkowy();
+    Wektor_3D VC1 = VC.policz_jednostkowy();
 
     std::cout << "\nWektory jednostkowe:\n";
-    wypisz_wektor_jednostkowy("VA1", VA1, policzona_dlugosc.LA);
-    wypisz_wektor_jednostkowy("VB1", VB1, policzona_dlugosc.LB);
-    wypisz_wektor_jednostkowy("VC1", VC1, policzona_dlugosc.LC);
+    wypisz_wektor_jednostkowy("VA1", VA1, dlugosci.LA);
+    wypisz_wektor_jednostkowy("VB1", VB1, dlugosci.LB);
+    wypisz_wektor_jednostkowy("VC1", VC1, dlugosci.LC);
     
     return {VA1, VB1, VC1};
 }
 
-// funkcja pomocnicza do wypisania dlugosci wektorow jednostkowych oraz sprawdza czy istnieja (czy nie sa zerowe)
-void wypisz_L_wektora_jednowego(const std::string& nazwa, const Wektor3D& wektor1, double dlugosc_oryginalu)
+// funkcja pomocnicza do wypisania dlugosci wektora jednostkowego oraz sprawdzenia czy istnieje (czy nie jest zerowy)
+void wypisz_L_wektora_jednostkowego(const std::string& nazwa, const Wektor_3D& wektor_jednostkowy, double dlugosc_oryginalu)
 {
     if(dlugosc_oryginalu == 0.0)
     {
@@ -166,44 +168,44 @@ void wypisz_L_wektora_jednowego(const std::string& nazwa, const Wektor3D& wektor
     }
     else
     {
-        std::cout << nazwa << " = " << wektor1.dlugosc() << "\n";
+        std::cout << nazwa << " = " << wektor_jednostkowy.policz_dlugosc() << "\n";
     }
 }
 
-void wyznacz_dlugosci_wektorow_jednostkowych(const Dane_wektory_jednostkowe& wektor1, const Dane_L_wektorow& policzona_dlugosc)
+void wyznacz_dlugosci_wektorow_jednostkowych(const Dane_wektorow_jednostkowych& wektory_jednostkowe, const Dane_L_wektorow& dlugosci)
 {
     std::cout << "\nDlugosci wektorow jednostkowych:\n";
-    wypisz_L_wektora_jednowego("LA1", wektor1.VA1, policzona_dlugosc.LA);
-    wypisz_L_wektora_jednowego("LB1", wektor1.VB1, policzona_dlugosc.LB);
-    wypisz_L_wektora_jednowego("LC1", wektor1.VC1, policzona_dlugosc.LC);
+    wypisz_L_wektora_jednostkowego("LA1", wektory_jednostkowe.VA1, dlugosci.LA);
+    wypisz_L_wektora_jednostkowego("LB1", wektory_jednostkowe.VB1, dlugosci.LB);
+    wypisz_L_wektora_jednostkowego("LC1", wektory_jednostkowe.VC1, dlugosci.LC);
 }
 
-Dane_il_wektorowe wyznacz_iloczyny_wektorowe(const Wektor3D& VA, const Wektor3D& VB, const Wektor3D& VC)
+Dane_il_wektorowych wyznacz_iloczyny_wektorowe(const Wektor_3D& VA, const Wektor_3D& VB, const Wektor_3D& VC)
 {
-    Wektor3D VAB = VA.il_wektor(VB);
-    Wektor3D VBC = VB.il_wektor(VC);
-    Wektor3D VCA = VC.il_wektor(VA);
+    Wektor_3D VAB = VA.policz_il_wektor(VB);
+    Wektor_3D VBC = VB.policz_il_wektor(VC);
+    Wektor_3D VCA = VC.policz_il_wektor(VA);
 
     std::cout << "\nIloczyny wektorowe:\n";
-    VAB.wypisz("VAB (VA x VB)");
-    VBC.wypisz("VBC (VB x VC)");
-    VCA.wypisz("VCA (VC x VA)");
+    VAB.wypisz_wektor("VAB (VA x VB)");
+    VBC.wypisz_wektor("VBC (VB x VC)");
+    VCA.wypisz_wektor("VCA (VC x VA)");
 
     return {VAB, VBC, VCA};
 }
 
-void wyznacz_il_mieszany(const Wektor3D& VA, const Wektor3D& VB, const Wektor3D& VC, const Dane_il_wektorowe& policzony_il_wektorowy)
+void wyznacz_il_mieszany(const Wektor_3D& VA, const Wektor_3D& VB, const Wektor_3D& VC, const Dane_il_wektorowych& il_wektorowe)
 {
-    double VABC = policzony_il_wektorowy.VAB.il_skalar(VC);
-    double VBCA = policzony_il_wektorowy.VBC.il_skalar(VA);
-    double VCAB = policzony_il_wektorowy.VCA.il_skalar(VB);
+    double VABC = il_wektorowe.VAB.policz_il_skalar(VC);
+    double VBCA = il_wektorowe.VBC.policz_il_skalar(VA);
+    double VCAB = il_wektorowe.VCA.policz_il_skalar(VB);
 
     std::cout << "\nPotrojny iloczyn skalarny mieszany:\n";
     std::cout << "VABC = " << bez_minus_zera(VABC) << "\nVBCA = " << bez_minus_zera(VBCA) << "\nVCAB = " << bez_minus_zera(VCAB) << "\n";
 }
 
 // funkcja pomocnicza do wypisania cosinusa oraz sprawdzenia czy istnieje (czy nie jest zerowy)
-void wypisz_cosinus(const std::string& nazwa, const Wektor3D& wektor1, double dlugosc_oryginalu)
+void wypisz_cosinus(const std::string& nazwa, const Wektor_3D& wektor_jednostkowy, double dlugosc_oryginalu)
 {
     if(dlugosc_oryginalu == 0.0)
     {
@@ -211,27 +213,28 @@ void wypisz_cosinus(const std::string& nazwa, const Wektor3D& wektor1, double dl
     }
     else
     {
-        std::cout << "l, m, n dla "<< nazwa << " = " << bez_minus_zera(wektor1.x) << ", " << bez_minus_zera(wektor1.y) << ", " << bez_minus_zera(wektor1.z)  << "\n";
+        std::cout << "l, m, n dla "<< nazwa << " = " << bez_minus_zera(wektor_jednostkowy.x) << ", " << bez_minus_zera(wektor_jednostkowy.y) << ", " << bez_minus_zera(wektor_jednostkowy.z)  << "\n";
     }
 }
 
-void cosinusy_kierunkowe(const Dane_wektory_jednostkowe& wektor1, const Dane_L_wektorow& policzona_dlugosc)
+// uzywam tutaj wektorow jednostkowych gdyz pokrywaja sie z cosinusami kierunkowymi
+void wyznacz_cosinusy_kierunkowe(const Dane_wektorow_jednostkowych& wektory_jednostkowe, const Dane_L_wektorow& dlugosci)
 {
-    std::cout << "\nCosinusy Kierunkowe\n";
-    wypisz_cosinus("VA", wektor1.VA1, policzona_dlugosc.LA);
-    wypisz_cosinus("VB", wektor1.VB1, policzona_dlugosc.LB);
-    wypisz_cosinus("VC", wektor1.VC1, policzona_dlugosc.LC);
+    std::cout << "\nCosinusy kierunkowe:\n";
+    wypisz_cosinus("VA", wektory_jednostkowe.VA1, dlugosci.LA);
+    wypisz_cosinus("VB", wektory_jednostkowe.VB1, dlugosci.LB);
+    wypisz_cosinus("VC", wektory_jednostkowe.VC1, dlugosci.LC);
 }
 
-// funkcja pomocnicza walidujaca poprawnosc wpisanych wspolrzednych
-double wczytaj_liczbe_rzecz(const std::string& wspolrzedna)
+// funkcja pomocnicza wczytujaca i walidujaca poprawnosc wpisanych wspolrzednych
+double wczytaj_wspolrzedna(const std::string& wspolrzedna)
 {
     std::string dane_wejsciowe;
 
     while(true) 
     {
         // zabezpieczenie przed zamknieciem strumienia (Ctrl+D / Ctrl+Z)
-        if (!(std::cin >> dane_wejsciowe))
+        if(!(std::cin >> dane_wejsciowe))
         {
             return 0.0;
         }
@@ -239,12 +242,12 @@ double wczytaj_liczbe_rzecz(const std::string& wspolrzedna)
         try 
         {
             // liczy jak duzo podanych znakow bylo faktycznymi liczbami
-            size_t policzone_znaki;
+            std::size_t policzone_znaki;
             
             // proba konwersji tekstu w liczbe rzeczywista
             double liczba = std::stod(dane_wejsciowe, &policzone_znaki);
             
-            // sprawdza czy liczba wszystkich wpisanych znakow jest rowna liczbie cyfr
+            // sprawdza czy liczba wszystkich wpisanych znakow jest rowna liczbie cyfr oraz wybranych znakow np "-"
             // np. jesli wpisane zostalo "12$", liczba znakow wynosi 3 ale liczba przetworzonych cyfr juz 2 
             if(policzone_znaki == dane_wejsciowe.length())
             {
@@ -255,7 +258,7 @@ double wczytaj_liczbe_rzecz(const std::string& wspolrzedna)
                 }
                 else
                 {
-                    std::cout << "BLAD! Liczba musi byc SKONCZONA i nie wieksza niz 1e100. Sprobuj ponownie.\n";
+                    std::cout << "BLAD! Liczba musi byc SKONCZONA i nie wieksza niz 1e100 (1*10^100). Sprobuj ponownie.\n";
                     std::cout << wspolrzedna << " = ";
                 }
             } 
@@ -265,14 +268,15 @@ double wczytaj_liczbe_rzecz(const std::string& wspolrzedna)
                 std::cout << wspolrzedna << " = ";
             }
         }
+        // sprawdza czy liczba nie wychodzi poza limit wartosci jaka moze pomiescic double
         catch(std::out_of_range&)
         {
             std::cout << "BLAD! Twoja liczba jest za duza! Sprobuj ponownie.\n";
             std::cout << wspolrzedna << " = ";
         }
+        // lapie bledy gdy uzytkownik wpisal sam tekst np "kaktus" albo "$"
         catch(...) 
         {
-            // lapie bledy gdy uzytkownik wpisal sam tekst np "kaktus" albo "$"
             std::cout << "BLAD! To nie jest liczba. Musisz podac liczbe RZECZYWISTA. Sprobuj ponownie.\n";
             std::cout << wspolrzedna << " = ";
         }
@@ -280,22 +284,20 @@ double wczytaj_liczbe_rzecz(const std::string& wspolrzedna)
 }
 
 // funkcja pomocnicza do podawania wspolrzednych wektorow
-Wektor3D podaj_wspolrzedne(const std::string& ktorego)
+Wektor_3D podaj_wspolrzedne(const std::string& ktorego)
 {
-    double x, y, z;
-
     std::cout << "\nPodaj wspolrzedne " << ktorego << ":\n";
     std::cout << "x = ";
-    x = wczytaj_liczbe_rzecz("x");
+    double x = wczytaj_wspolrzedna("x");
     std::cout << "y = ";
-    y = wczytaj_liczbe_rzecz("y");
+    double y = wczytaj_wspolrzedna("y");
     std::cout << "z = ";
-    z = wczytaj_liczbe_rzecz("z");
+    double z = wczytaj_wspolrzedna("z");
 
     return {x, y, z};
 }
 
-void obliczenia(const Wektor3D& VA, const Wektor3D& VB, const Wektor3D& VC)
+void obliczenia(const Wektor_3D& VA, const Wektor_3D& VB, const Wektor_3D& VC)
 {
     wypisz_dane(VA, VB, VC);
 
@@ -303,25 +305,25 @@ void obliczenia(const Wektor3D& VA, const Wektor3D& VB, const Wektor3D& VC)
     Dane_L_wektorow dlugosci = wyznacz_L_wektorow(VA, VB, VC);
 
     // 2. iloczyny skalarne
-    Dane_il_skalarne skalary = wyznacz_il_skalarne(VA, VB, VC);
+    Dane_il_skalarnych skalary = wyznacz_il_skalarne(VA, VB, VC);
 
     // 3. nierownosc Cauchy-Schwarz-Buniakowski
     wyznacz_nierownosc_CSB(skalary, dlugosci);
 
     // 4. wektory jednostkowe
-    Dane_wektory_jednostkowe jednostki = wyznacz_wektory_jednostkowe(VA, VB, VC, dlugosci);
+    Dane_wektorow_jednostkowych jednostki = wyznacz_wektory_jednostkowe(VA, VB, VC, dlugosci);
 
     // 5. dlugosci wektorow jednostkowych
     wyznacz_dlugosci_wektorow_jednostkowych(jednostki, dlugosci);
 
     // 6. iloczyny wektorowe
-    Dane_il_wektorowe policzone_il_wektorowe = wyznacz_iloczyny_wektorowe(VA, VB, VC);
+    Dane_il_wektorowych il_wektorowe = wyznacz_iloczyny_wektorowe(VA, VB, VC);
 
     // 7. potrojny iloczyn skalarny mieszany
-    wyznacz_il_mieszany(VA, VB, VC, policzone_il_wektorowe);
+    wyznacz_il_mieszany(VA, VB, VC, il_wektorowe);
 
     // 8. cosinusy kierunkowe
-    cosinusy_kierunkowe(jednostki, dlugosci);
+    wyznacz_cosinusy_kierunkowe(jednostki, dlugosci);
 }
 
 int main()
@@ -331,14 +333,15 @@ int main()
 
     std::cout << "\nWitaj w kalkulatorze wektorow 3D!\n";
 
-    Wektor3D VA = podaj_wspolrzedne("pierwszego wektora VA");
-    Wektor3D VB = podaj_wspolrzedne("drugiego wektora VB");
-    Wektor3D VC = podaj_wspolrzedne("trzeciego wektora VC");
+    Wektor_3D VA = podaj_wspolrzedne("pierwszego wektora VA");
+    Wektor_3D VB = podaj_wspolrzedne("drugiego wektora VB");
+    Wektor_3D VC = podaj_wspolrzedne("trzeciego wektora VC");
 
     obliczenia(VA, VB, VC);
 
     std::cout << "\nNacisnij <Enter> zeby zakonczyc program";
-    std::cin.ignore();
+    // zabezpieczenie przed przypadkowo wpisana spacja po wpisaniu ostatniej wspolrzednej
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cin.get();
 
     return 0;
